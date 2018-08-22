@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<head>
+	<title>The Iris Dataset</title>
+	<style>
+	<!--
+		body {margin-left: 2.5in;
+		      margin-right: 2.5in;
+			  margin-top: 1in;
+			  margin-bottom: 3in;
+			  text-align: center}
+		object {width: 100%}
+		img {width: 100%}
+		p {text-align: left}
+	-->
+	</style>
+</head>
+<body>
+	<h1>The Iris Dataset</h1>
+	<p><b>Data:</b> The data comprise a collection of 50 observations of each of three types of iris flower: sertosa, versicolor, and virginica. Each observation is a collection of four measurements: sepal length, sepal width, petal length, and petal width.</p>
+	<p><b>Problem:</b> The problem is to determine the type of flower from the four measurements alone. We make the assumption that a given flower is one of these three types of iris.</p>
+	<p><b>Method 1:</b> We begin with a basic visualization of the data. In Figure 1, we plot each of the four measurements against each other. In the top left subplot, the x-axis is sepal length, and the y-axis is sepal length. In the subplot to the right, the x-axis is sepal length, and the y-axis is sepal width. This pattern continues with the x-axes in the rows from top to bottom and the y-axes in the columns from left to right in the following order: sepal length, sepal width, petal length, and petal width. The points that have been misclassified by our model have already been marked with a red 'x'.</p>
+	<figure>
+		<figcaption>Figure 1:</figcaption>
+		<object data="Figure_1.svg" type="image/svg+xml" name="Figure 1">
+			<img src="Figure_1.png" />
+		</object>
+	</figure>
+	<p>Since Gaussian distributions are abundant in nature, we have made the assumption that, for any given type of iris, each measurement is sampled from an independent Gaussian distribution. We calculate the mean and standard deviations of each measurement for each type of iris to generate our model, which is a mixture of Gaussians. This model has the advantage of being particularly simple.</p>
+	<p>To assess the suitability of our model, we generate a random collection of 50 of each type of iris from it. A suitable model will have similar appearance and features. In Figure 2, we plot this random data in the same manner as Figure 1.</p>
+	<figure>
+		<figcaption>Figure 2:</figcaption>
+		<object data="Figure_2.svg" type="image/svg+xml" name="Figure 2">
+			<img src="Figure_2.png" />
+		</object>
+	</figure>
+	<p>Our mixtue of Gaussians model is similar but not indistinguishable from the original data. In particular, the distributions are "rounder." However, the manner in which the data overlap is similar, and we determine that the model is a fairly accurate one for our purpose of identifying iris type under the assumption that it already is one of these three. We could provide a fourth option of rejecting a flower determined to be neither of the three types by setting a threshold probability, but a mixture of Gaussians might not be the best model for this task.</p>
+	<p>Due to the simplicity of our model, overfitting is not a concern, so we do not distinguish between training data and test data. Instead, we use all the data to generate the model and then use all the data again to test its performance. There are 7 misclassifications: 4 Iris versicolor are misidentified as Iris virginica, and 3 Iris virginica are misidentified as Iris versicolor.</p>
+	<p><b>Method 2:</b> Since the dataset is small, we improve the model by using a kernel density estimation for the density functions of the data. We chose the standard normal distribution as the kernel. Since our data was close to normal, we selected the bandwidth parameter 'h' using a basic rule of thumb. This new distribution is significantly slower to compute; however, the results appear to be slightly more accurate. There are 5 misclassifications: in 2 cases a versicolor is mistaken for a viriginica, and in 3 cases a virginica is mistaken for a versicolor.</p>
+	<figure>
+		<figcaption>Figure 3:</figcaption>
+		<object data="Figure_3.svg" type="image/svg+xml" name="Figure 3">
+			<img src="Figure_3.png" />
+		</object>
+	</figure>
+	<p>The distribution functions for each of the predictors in shown in the following fourth figure. Here, the rows from top to bottom are setosa, versicolor, and virginica, and the columns from left to right are sepal length, sepal width, petal length, and petal width.</p>
+	<figure>
+		<figcaption>Figure 4:</figcaption>
+		<object data="Figure_4.svg" type="image/svg+xml" name="Figure 4">
+			<img src="Figure_4.png" />
+		</object>
+	</figure>
+	<p>Again we can estimate the fit of our model visually by producing a comparable random data set from the kernel distributions.</p>
+	<figure>
+		<figcaption>Figure 5:</figcaption>
+		<object data="Figure_5.svg" type="image/svg+xml" name="Figure 5">
+			<img src="Figure_5.png" />
+		</object>
+	</figure>
+	<p>The differences between Figure 2 and Figure 5 are subtle and difficult to discern by eye, but careful observation reveals the second model to be a much better fit than the first. We might suspect that we have overfitted the data, since our model uses all 50 data points from each flower type to compute the kernel density function. However, Figure 4 confirms that we did not overfit the data, so there is no need to resort to resampling statistics to compare the two models.</p>
+	<p><b>Conclusion:</b> Since the original data overlap, it is not possible to distinguish between Iris versicolor and Iris virginica from these four measurements alone in 100% of the cases. Our first model, the mixture of Gaussians, is a somewhat accurate predictor. We can improve performance by fitting more precise distributions using kernel density estimation. The computational cost of kernel density estimation is much higher, but the low complexity of the distributions suggests that they could be well approximated with far fewer parameters than the entirety of our data set. Such optimizations are not required for this small example.</p>
+	<p>It is well-known that a very simple decision tree can classify this data with comparable accuracy. Our probabilistic approach, however, is highly interpretable and meaningful. With it, we can not only determine what species of iris we have measured but we can also determine that a measured flower could be unlikely to be an iris at all, by setting a threshold probability. All predictive modeling boils down to approximating probability distributions by updating prior distributions on observed data. The different techniques employed by analysts are simply different manners of filling in the gaps (bias) between the data and compressing its representation. Thus, all data analysis is a special case of the approximation of measurable functions, and this example demonstrates that fact quite explicitly.</p>
+</body>

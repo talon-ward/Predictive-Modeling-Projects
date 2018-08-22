@@ -1,0 +1,1 @@
+This is a collection of projects to demonstrate predictive modeling techniques.
